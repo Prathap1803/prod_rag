@@ -18,6 +18,8 @@ def load_documents(folder_path: str):
                 loader = TextLoader(file_path, encoding="utf-8")
             elif file_name.endswith(".docx"):
                 loader = Docx2txtLoader(file_path)
+            elif file_name.endswith(".md"):
+                loader = TextLoader(file_path)
             else:
                 print(f"Skipping unsupported file: {file_name}")
                 continue

@@ -1,52 +1,32 @@
 # deva/ingestion/indexer.py
-
-import os
-import shutil
-from langchain_chroma import Chroma
-from deva.config import EMBEDDINGS_PROVIDER, GEMINI_API_KEY, CHROMA_DIR
+from deva.config import EMBEDDINGS_PROVIDER, GEMINI_API_KEY
 from deva.providers.embeddings import get_embeddings
+from deva.providers.vectorstore.factory import get_vectorstore
 
-embeddings = get_embeddings(
+
+
+def get_or_create_vectorstore(reset=False):
+    """
+    Load or create a vector store (local or remote)
+    """
+    return get_vectorstore(
+    embeddings = get_embeddings(
     provider=EMBEDDINGS_PROVIDER,
     api_key=GEMINI_API_KEY,
-)
-
-
-def get_or_create_vectorstore(reset: bool = False):
-    """
-    Load existing Chroma vectorstore or create a new one.
-    
-    Args:
-        reset (bool): If True, deletes existing DB and creates new.
-        
-    Returns:
-        Chroma: Vectorstore object
-    """
-    # Delete DB if reset
-    if reset and os.path.exists(CHROMA_DIR):
-        shutil.rmtree(CHROMA_DIR)
-    
-    # Make sure directory exists
-    os.makedirs(CHROMA_DIR, exist_ok=True)
-    
-    # Load or create vectorstore
-    vectorstore = Chroma(
-        persist_directory=CHROMA_DIR,
-        embedding_function=embeddings
+    ),
+        reset=reset
     )
-    
-    return vectorstore
-
 
 def add_documents(vectorstore, chunks):
     """
-    Add a list of document chunks to an existing vectorstore.
-    
+    Add document chunks to the active vector store.
+
     Args:
-        vectorstore (Chroma): The vectorstore instance
-        chunks (List[Document]): List of LangChain Document objects
+        vectorstore: LangChain-compatible vector store
+        chunks (list[Document]): List of LangChain Document objects
     """
     if not chunks:
         raise ValueError("No document chunks provided to add to vectorstore.")
-    
+
     vectorstore.add_documents(chunks)
+

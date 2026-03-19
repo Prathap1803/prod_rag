@@ -1,4 +1,5 @@
 
+
 langchain
 langchain-community
 langchain-ollama>=0.1.2
@@ -9,3 +10,15 @@ sentence-transformers
 ollama
 langchain-huggingface
 langchain-google-genai
+dotenv
+# Monitoring & orchestration
+langfuse
+langgraph
+fastapi
+uvicorn[standard]
+python-dotenv
+ragas
+datasets
+pandas
+pinecone
+langchain-pinecone
