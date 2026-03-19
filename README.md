@@ -1,100 +1,27 @@
-# 🧠 Deva — Local RAG AI Assistant (CLI)
+# 🧠 Deva — Local RAG API
 
-Deva is a **personal, local Retrieval-Augmented Generation (RAG) CLI tool** that lets you chat with your own documents using modern LLMs — fully offline or with optional online models.
+A production-grade, local Retrieval-Augmented Generation (RAG) system built with LangChain, LangGraph, and FastAPI.
+Chat with your own documents using local or cloud LLMs — with monitoring, evaluation, and guardrails built in.
 
-It ingests documents, builds a vector database locally, and answers questions **only from your data**.
-
-No cloud required. No data leaves your machine (unless you choose an online LLM).
+> No data leaves your machine unless you choose an online LLM or monitoring service.
 
 ---
 
 ## ✨ Features
 
-- 📂 Ingest documents from a folder (`PDF`, `DOCX`, `TXT`)
-- 🧩 Smart document chunking for embeddings
-- 🧠 Local vector database using **Chroma**
-- 🔍 RAG-based question answering
-- 🤖 Pluggable LLM support:
-  - Local: **Ollama**
-  - Online: **Gemini** (extensible)
-- 🔁 Incremental ingestion or full reset
-- 🖥️ Simple, fast CLI interface
+- 📂 **Document ingestion** — PDF, DOCX, TXT support with smart chunking
+- 🧠 **Local vector database** — ChromaDB with persistent embeddings
+- 🔍 **Hybrid retrieval** — MMR vector search + optional Cohere reranking
+- 🎯 **Query intelligence layer** — intent classification + query enhancement before retrieval
+- 🤖 **Pluggable LLM support** — Local (Ollama) or Online (Gemini)
+- 🔁 **LangGraph orchestration** — graph-based pipeline with extensible nodes
+- 📡 **FastAPI REST API** — `/chat`, `/ingest`, and `/health` endpoints
+- 📊 **Langfuse monitoring** — full trace observability per session and user
+- 🧪 **RAGAS evaluation** — faithfulness, answer relevancy, context precision & recall
+- 🛡️ **Guardrails** — prompt-level safety + output enforcement
+- 📝 **Structured logging** — levelled, rotating file + stdout logs
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
-Deva is modular by design:
-
-- **CLI layer** → user interaction
-- **Ingestion layer** → load & chunk documents
-- **Vector store** → persistent embeddings
-- **RAG pipeline** → retrieval + prompt + LLM
-- **Providers layer** → swap LLMs & embeddings
-
-📘 See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for details.
-
----
-
-## 🚀 Quick Start
-
-### 1. Install
-
-```bash
-git clone https://github.com/yourusername/deva-cli.git
-cd deva-cli
-pip install -e .
-```
-
-### 2. (Optional) Install Ollama
-```
-https://ollama.com
-ollama pull dolphin-mistral
-
-```
-### 3. Ingest Documents
-```
-deva ingest ./data
-```
-
-### 4. Start Chat
-```
-deva chat
-```
-## 🔐 Environment Configuration
-
-Create a .env file:
-```
-DEVA_LLM_PROVIDER=ollama
-DEVA_LLM_MODEL=dolphin-mistral
-```
-
-For Gemini:
-```
-DEVA_LLM_PROVIDER=gemini
-DEVA_LLM_MODEL=gemini-1.5-pro
-GEMINI_API_KEY=your_api_key_here
-```
-## 📦 Tech Stack
-
-- LangChain
-
-- ChromaDB
-
-- Ollama
-
-- HuggingFace Sentence Transformers
-
-- Typer
-
-### 🛣️ Roadmap
-
-- [ ] Streaming responses
-
-- [ ] Multiple vector store backends
-
-- [ ] Agent + tool calling
-
-- [ ] Web UI
-
-- [ ] Plugin system
