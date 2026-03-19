@@ -1,10 +1,12 @@
 import os
+from deva.logger import get_logger
 from langchain_community.document_loaders import (
     PyPDFLoader,
     TextLoader,
     Docx2txtLoader,
 )
 
+logger = get_logger(__name__)
 def load_documents(folder_path: str):
     documents = []
 
@@ -21,7 +23,7 @@ def load_documents(folder_path: str):
             elif file_name.endswith(".md"):
                 loader = TextLoader(file_path)
             else:
-                print(f"Skipping unsupported file: {file_name}")
+                logger.debug(f"Skipping unsupported file: {file_name}")
                 continue
 
             docs = loader.load()
@@ -31,9 +33,10 @@ def load_documents(folder_path: str):
             documents.extend(docs)
 
         except Exception as e:
-            print(f"Failed to load {file_name}: {e}")
+            logger.error(f"Failed to load {file_name}: {e}", exc_info=True)
 
     if not documents:
+        logger.error("No valid documents found in folder")
         raise ValueError("No valid documents found")
 
     return documents

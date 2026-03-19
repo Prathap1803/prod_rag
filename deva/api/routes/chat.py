@@ -12,7 +12,9 @@ from deva.providers.llm import get_llm
 from deva.config import LLM_PROVIDER, LLM_MODEL
 
 router = APIRouter()
+from deva.logger import get_logger
 
+logger = get_logger(__name__)
 # Singleton chain — built once on first request
 _chain = None
 
@@ -28,6 +30,8 @@ def get_chain():
 
 @router.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest):
+    logger.info(f"Chat request | user={req.user_id} | session={req.session_id} | question={req.question!r}")
+
     chain = get_chain()
 
     session_id = req.session_id or str(uuid4())
@@ -45,7 +49,9 @@ def chat(req: ChatRequest):
                 config={"callbacks": [langfuse_handler]},
             )
         latency = round(time.time() - start, 3)
+        logger.info(f"Chat completed | intent={result.get('intent')} | latency={latency}s")
     except Exception as e:
+        logger.error(f"RAG chain error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"RAG chain error: {str(e)}")
 
     # Build sources list
@@ -58,7 +64,7 @@ def chat(req: ChatRequest):
         if label not in seen:
             sources.append(SourceDoc(source=src, page=page))
             seen.add(label)
-
+    logger.debug(f"Sources returned: {[s.source for s in sources]}")
     return ChatResponse(
         answer=result["answer"],
         intent=result.get("intent", "qa"),

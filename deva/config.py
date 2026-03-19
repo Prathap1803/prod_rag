@@ -39,4 +39,7 @@ COHERE_RERANK_TOP_N = int(os.getenv("COHERE_RERANK_TOP_N", "5"))
 CHUNK_SIZE = int(os.getenv("DEVA_CHUNK_SIZE", "1000"))
 CHUNK_OVERLAP = int(os.getenv("DEVA_CHUNK_OVERLAP", "200"))
 
-#
+# Logging
+LOG_LEVEL = os.getenv("DEVA_LOG_LEVEL", "INFO")
+LOG_TO_FILE = os.getenv("DEVA_LOG_TO_FILE", "true")
+LOG_FILE_PATH = os.getenv("DEVA_LOG_FILE", "./logs/deva.log")

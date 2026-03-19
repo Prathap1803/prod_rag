@@ -2,13 +2,16 @@
 from deva.config import EMBEDDINGS_PROVIDER, GEMINI_API_KEY
 from deva.providers.embeddings import get_embeddings
 from deva.providers.vectorstore.factory import get_vectorstore
+from deva.logger import get_logger
 
+logger = get_logger(__name__)
 
 
 def get_or_create_vectorstore(reset=False):
     """
     Load or create a vector store (local or remote)
     """
+    logger.info(f"Getting vectorstore | reset={reset}")
     return get_vectorstore(
     embeddings = get_embeddings(
     provider=EMBEDDINGS_PROVIDER,
@@ -26,7 +29,9 @@ def add_documents(vectorstore, chunks):
         chunks (list[Document]): List of LangChain Document objects
     """
     if not chunks:
+        logger.error("No chunks provided to add_documents")
         raise ValueError("No document chunks provided to add to vectorstore.")
-
+    logger.info(f"Adding {len(chunks)} chunks to vectorstore")
     vectorstore.add_documents(chunks)
+    logger.info("Chunks added successfully")
 
