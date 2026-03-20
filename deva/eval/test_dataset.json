@@ -1,0 +1,10 @@
+[
+  {
+    "question": "What is the main topic of the document?",
+    "ground_truth": "Replace this with the actual expected answer from your documents."
+  },
+  {
+    "question": "Summarize the key points.",
+    "ground_truth": "Replace this with the actual expected answer from your documents."
+  }
+]
