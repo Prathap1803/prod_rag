@@ -42,6 +42,9 @@ def create_rag_chain(vectorstore, llm):
             docs=RunnableLambda(_get_search_query) | retriever,
             question=RunnableLambda(_get_search_query),
             intent=RunnableLambda(_get_intent),
+             enhanced_question=RunnableLambda(          
+                lambda x: x.get("enhanced_question") or x.get("question", "")
+            ),
         )
         | RunnableLambda(_build_context)
         | RunnableParallel(
